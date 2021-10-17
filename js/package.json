@@ -13,7 +13,6 @@
   "scripts": {
     "bootstrap": "lerna link && lerna bootstrap",
     "build": "lerna run build",
-    "build:web": "lerna run build --scope=web --include-dependencies",
     "start": "cross-env CI=true lerna run start --scope @oyster/common --stream --parallel --scope web",
     "lint": "prettier -c 'packages/*/{src,test}/**/*.ts' && npm run lint:eslint",
     "lint:eslint": "eslint 'packages/*/{src,test}/**/*.ts'",
@@ -22,7 +21,8 @@
     "deploy": "run-s deploy:docs build deploy:apps && gh-pages -d docs",
     "deploy:docs": "lerna run docs",
     "deploy:apps": "lerna run deploy:app",
-    "test": "lerna run test --concurrency 1 --stream"
+    "test": "lerna run test --concurrency 1 --stream",
+    "build:web": "lerna run build --scope=web --include-dependencies"
   },
   "lint-staged": {
     "packages/*/{src,test}/**/*.ts": [
@@ -32,11 +32,6 @@
   },
   "resolutions": {
     "@types/react": "^17.0.16"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "prettier": {
     "arrowParens": "avoid",
