@@ -49,6 +49,12 @@ const LOCALHOST = 'localhost';
 
 export const ENDPOINTS: Array<Endpoint> = [
   {
+    name: 'devnet',
+    label: 'devnet',
+    url: clusterApiUrl('devnet'),
+    chainId: ChainId.Devnet,
+  },
+  {
     name: 'mainnet-beta',
     label: 'mainnet-beta',
     url: 'https://api.metaplex.solana.com/',
@@ -71,12 +77,6 @@ export const ENDPOINTS: Array<Endpoint> = [
     label: 'testnet',
     url: clusterApiUrl('testnet'),
     chainId: ChainId.Testnet,
-  },
-  {
-    name: 'devnet',
-    label: 'devnet',
-    url: clusterApiUrl('devnet'),
-    chainId: ChainId.Devnet,
   },
 ];
 
