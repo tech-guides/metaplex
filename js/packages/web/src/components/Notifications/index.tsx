@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckCircleTwoTone,
   LoadingOutlined,
@@ -13,11 +14,11 @@ import {
   useUserAccounts,
   VaultState,
   WalletSigner,
+  WRAPPED_SOL_MINT,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { Badge, Popover, List } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { closePersonalEscrow } from '../../actions/closePersonalEscrow';
 import { decommAuctionManagerAndReturnPrizes } from '../../actions/decommAuctionManagerAndReturnPrizes';
@@ -103,7 +104,7 @@ function RunAction({
 }
 
 export async function getPersonalEscrowAta(
-  wallet: WalletSigner | undefined,
+  wallet: WalletSigner | undefined
 ): Promise<StringPublicKey | undefined> {
   const PROGRAM_IDS = programIds();
   if (!wallet?.publicKey) return;
@@ -330,7 +331,8 @@ export function useSettlementAuctions({
                 myPayingAccount?.pubkey,
                 accountByMint,
               );
-              if (wallet.publicKey) {
+              // accept funds (open WSOL & close WSOL) only if Auction currency SOL
+              if (wallet.publicKey && auctionView.auction.info.tokenMint == WRAPPED_SOL_MINT.toBase58()) {
                 const ata = await getPersonalEscrowAta(wallet);
                 if (ata) await closePersonalEscrow(connection, wallet, ata);
               }
@@ -361,11 +363,13 @@ export function Notifications() {
   const upcomingAuctions = useAuctions(AuctionViewState.Upcoming);
   const connection = useConnection();
   const wallet = useWallet();
+  const { accountByMint } = useUserAccounts();
 
   const notifications: NotificationCard[] = [];
 
   const walletPubkey = wallet.publicKey?.toBase58() || '';
 
+ 
   useCollapseWrappedSol({ connection, wallet, notifications });
 
   useSettlementAuctions({ connection, wallet, notifications });
@@ -517,7 +521,10 @@ export function Notifications() {
     });
 
   const content = notifications.length ? (
-    <div style={{ width: '300px' }}>
+    <div
+      style={{ width: '300px', color: 'white' }}
+      className={'notifications-container'}
+    >
       <List
         itemLayout="vertical"
         size="small"
@@ -558,13 +565,8 @@ export function Notifications() {
   );
 
   const justContent = (
-    <Popover
-      className="noty-popover"
-      placement="bottomLeft"
-      content={content}
-      trigger="click"
-    >
-      <h1 className="title">M</h1>
+    <Popover placement="bottomLeft" content={content} trigger="click">
+      <img src={'/bell.svg'} style={{ cursor: 'pointer' }} />
     </Popover>
   );
 
@@ -573,7 +575,7 @@ export function Notifications() {
     return (
       <Badge
         count={notifications.length - 1}
-        style={{ backgroundColor: 'white' }}
+        style={{ backgroundColor: 'white', color: 'black' }}
       >
         {justContent}
       </Badge>
