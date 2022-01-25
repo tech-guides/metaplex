@@ -53,6 +53,15 @@ const { Step } = Steps;
 const { Dragger } = Upload;
 const { Text } = Typography;
 
+// Custom changes
+const defaultAttributes = [
+  { trait_type: 'id', value: '', display_type: '' },
+  { trait_type: 'design', value: '', display_type: '' },
+  { trait_type: 'city', value: 'Austin', display_type: '' },
+  { trait_type: 'size', value: `00' X 00'`, display_type: '' },
+  { trait_type: 'ran for', value: '00 days', display_type: '' },
+];
+
 export const ArtCreateView = () => {
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
@@ -66,22 +75,24 @@ export const ArtCreateView = () => {
   const [step, setStep] = useState<number>(0);
   const [stepsVisible, setStepsVisible] = useState<boolean>(true);
   const [isMinting, setMinting] = useState<boolean>(false);
-  const [nft, setNft] =
-    useState<{ metadataAccount: StringPublicKey } | undefined>(undefined);
+  const [nft, setNft] = useState<
+    { metadataAccount: StringPublicKey } | undefined
+  >(undefined);
   const [files, setFiles] = useState<File[]>([]);
   const [attributes, setAttributes] = useState<IMetadataExtension>({
-    name: '',
+    name: 'cryptoisreal. <id>',
     symbol: '',
     description: '',
     external_url: '',
     image: '',
     animation_url: undefined,
-    attributes: undefined,
-    seller_fee_basis_points: 0,
+    attributes: defaultAttributes,
+    seller_fee_basis_points: 3000,
     creators: [],
     properties: {
       files: [],
       category: MetadataCategory.Image,
+      maxSupply: 1,
     },
   });
 
@@ -242,7 +253,11 @@ const CategoryStep = (props: {
         <h2>Create a new item</h2>
         <p>
           First time creating on Metaplex?{' '}
-          <a href="https://docs.metaplex.com/create-store/sell" target="_blank" rel="noreferrer">
+          <a
+            href="https://docs.metaplex.com/create-store/sell"
+            target="_blank"
+            rel="noreferrer"
+          >
             Read our creators’ guide.
           </a>
         </p>
@@ -553,8 +568,11 @@ const UploadStep = (props: {
                   : mainFile && mainFile.name,
             });
             const url = await fetch(customURL).then(res => res.blob());
-            const files = [coverFile, mainFile, customURL ? new File([url], customURL) : '']
-              .filter(f => f) as File[];
+            const files = [
+              coverFile,
+              mainFile,
+              customURL ? new File([url], customURL) : '',
+            ].filter(f => f) as File[];
 
             props.setFiles(files);
             props.confirm();
@@ -718,6 +736,7 @@ const InfoStep = (props: {
             <span className="field-title">Maximum Supply</span>
             <InputNumber
               placeholder="Quantity"
+              value={props.attributes.properties.maxSupply}
               onChange={(val: number) => {
                 props.setAttributes({
                   ...props.attributes,
@@ -734,48 +753,50 @@ const InfoStep = (props: {
             <span className="field-title">Attributes</span>
           </label>
           <Form name="dynamic_attributes" form={form} autoComplete="off">
-            <Form.List name="attributes">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, fieldKey }) => (
-                    <Space key={key} align="baseline">
-                      <Form.Item
-                        name={[name, 'trait_type']}
-                        fieldKey={[fieldKey, 'trait_type']}
-                        hasFeedback
+            <Form.List name="attributes" initialValue={defaultAttributes}>
+              {(fields, { add, remove }) => {
+                return (
+                  <>
+                    {fields.map(({ key, name, fieldKey }) => (
+                      <Space key={key} align="baseline">
+                        <Form.Item
+                          name={[name, 'trait_type']}
+                          fieldKey={[fieldKey, 'trait_type']}
+                          hasFeedback
+                        >
+                          <Input placeholder="trait_type (Optional)" />
+                        </Form.Item>
+                        <Form.Item
+                          name={[name, 'value']}
+                          fieldKey={[fieldKey, 'value']}
+                          rules={[{ required: true, message: 'Missing value' }]}
+                          hasFeedback
+                        >
+                          <Input placeholder="value" />
+                        </Form.Item>
+                        <Form.Item
+                          name={[name, 'display_type']}
+                          fieldKey={[fieldKey, 'display_type']}
+                          hasFeedback
+                        >
+                          <Input placeholder="display_type (Optional)" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
                       >
-                        <Input placeholder="trait_type (Optional)" />
-                      </Form.Item>
-                      <Form.Item
-                        name={[name, 'value']}
-                        fieldKey={[fieldKey, 'value']}
-                        rules={[{ required: true, message: 'Missing value' }]}
-                        hasFeedback
-                      >
-                        <Input placeholder="value" />
-                      </Form.Item>
-                      <Form.Item
-                        name={[name, 'display_type']}
-                        fieldKey={[fieldKey, 'display_type']}
-                        hasFeedback
-                      >
-                        <Input placeholder="display_type (Optional)" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add attribute
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
+                        Add attribute
+                      </Button>
+                    </Form.Item>
+                  </>
+                );
+              }}
             </Form.List>
           </Form>
         </Col>
@@ -950,6 +971,7 @@ const RoyaltiesStep = (props: {
             min={0}
             max={100}
             placeholder="Between 0 and 100"
+            value={props.attributes.seller_fee_basis_points / 100}
             onChange={(val: number) => {
               props.setAttributes({
                 ...props.attributes,
