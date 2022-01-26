@@ -80,7 +80,7 @@ export const ArtCreateView = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [attributes, setAttributes] = useState<IMetadataExtension>({
     name: 'cryptoisreal. <id>',
-    symbol: '',
+    symbol: 'CIR',
     description: "<what's written on the billboard>",
     external_url: '',
     image: '',
