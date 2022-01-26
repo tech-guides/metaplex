@@ -58,8 +58,8 @@ const defaultAttributes = [
   { trait_type: 'id', value: '', display_type: '' },
   { trait_type: 'design', value: '', display_type: '' },
   { trait_type: 'city', value: 'Austin', display_type: '' },
-  { trait_type: 'size', value: `00' X 00'`, display_type: '' },
-  { trait_type: 'ran for', value: '00 days', display_type: '' },
+  { trait_type: 'size', value: `<00' X 00'>`, display_type: '' },
+  { trait_type: 'ran for', value: '<00 days>', display_type: '' },
 ];
 
 export const ArtCreateView = () => {
@@ -81,7 +81,7 @@ export const ArtCreateView = () => {
   const [attributes, setAttributes] = useState<IMetadataExtension>({
     name: 'cryptoisreal. <id>',
     symbol: '',
-    description: '',
+    description: "<what's written on the billboard>",
     external_url: '',
     image: '',
     animation_url: undefined,
@@ -91,7 +91,7 @@ export const ArtCreateView = () => {
     properties: {
       files: [],
       category: MetadataCategory.Image,
-      maxSupply: 1,
+      maxSupply: 0,
     },
   });
 
