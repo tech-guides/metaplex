@@ -54,7 +54,7 @@ export const ENDPOINTS: Array<Endpoint> = [
   {
     name: 'mainnet-beta',
     label: 'mainnet-beta',
-    url: 'https://api.metaplex.solana.com/',
+    url: 'https://ssc-dao.genesysgo.net/',
     chainId: ChainId.MainnetBeta,
   },
   {
@@ -101,6 +101,7 @@ export function ConnectionProvider({ children }: { children: any }) {
   }
 
   const endpoint = maybeEndpoint || DEFAULT_ENDPOINT;
+  console.log({ chain: endpoint.name, endpoint: endpoint.url }) // for debugging
 
   const { current: connection } = useRef(new Connection(endpoint.url));
 

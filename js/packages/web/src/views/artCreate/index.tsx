@@ -53,6 +53,26 @@ const { Step } = Steps;
 const { Dragger } = Upload;
 const { Text } = Typography;
 
+// Custom changes
+const defaultAttributes = [
+  { trait_type: 'id', value: '', display_type: '' },
+  { trait_type: 'city', value: 'Austin', display_type: '' },
+  { trait_type: 'design', value: '', display_type: '' },
+  { trait_type: 'size', value: `<00' x 00'>`, display_type: '' },
+  { trait_type: 'dates', value: '<mmm dd, yyyy - mmm dd, yyyy>', display_type: '' },
+  { trait_type: 'lifespan', value: '<00 days>', display_type: '' },
+  { trait_type: 'address', value: '<short address>', display_type: '' },
+  { trait_type: 'latitude', value: '(upto 5 decimal places)', display_type: '' },
+  { trait_type: 'longitude', value: '(upto 5 decimal places)', display_type: '' },
+  { trait_type: 'lighting', value: '', display_type: '' },
+  { trait_type: 'birds', value: '<yes/no>', display_type: '' },
+  { trait_type: 'traintracks', value: '<yes/no>', display_type: '' },
+  { trait_type: 'billboard property', value: '', display_type: '' },
+  { trait_type: 'facing', value: '', display_type: '' },
+  { trait_type: 'url', value: '', display_type: '' },
+  { trait_type: 'linked nft', value: '', display_type: '' }
+];
+
 export const ArtCreateView = () => {
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
@@ -70,18 +90,19 @@ export const ArtCreateView = () => {
     useState<{ metadataAccount: StringPublicKey } | undefined>(undefined);
   const [files, setFiles] = useState<File[]>([]);
   const [attributes, setAttributes] = useState<IMetadataExtension>({
-    name: '',
-    symbol: '',
-    description: '',
+    name: 'crypto is real. #<id>',
+    symbol: 'CIR',
+    description: "<what's written on the billboard>",
     external_url: '',
     image: '',
     animation_url: undefined,
-    attributes: undefined,
-    seller_fee_basis_points: 0,
+    attributes: defaultAttributes,
+    seller_fee_basis_points: 3000,
     creators: [],
     properties: {
       files: [],
       category: MetadataCategory.Image,
+      maxSupply: 0,
     },
   });
 
@@ -718,6 +739,7 @@ const InfoStep = (props: {
             <span className="field-title">Maximum Supply</span>
             <InputNumber
               placeholder="Quantity"
+              value={props.attributes.properties.maxSupply}
               onChange={(val: number) => {
                 props.setAttributes({
                   ...props.attributes,
@@ -734,7 +756,7 @@ const InfoStep = (props: {
             <span className="field-title">Attributes</span>
           </label>
           <Form name="dynamic_attributes" form={form} autoComplete="off">
-            <Form.List name="attributes">
+            <Form.List name="attributes" initialValue={defaultAttributes}>
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey }) => (
@@ -950,6 +972,7 @@ const RoyaltiesStep = (props: {
             min={0}
             max={100}
             placeholder="Between 0 and 100"
+            value={props.attributes.seller_fee_basis_points / 100}
             onChange={(val: number) => {
               props.setAttributes({
                 ...props.attributes,
