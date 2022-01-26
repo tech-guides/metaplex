@@ -168,8 +168,10 @@ export const AuctionCreateView = () => {
     reservationPrice: 0,
     items: [],
     category: AuctionCategory.Open,
-    auctionDurationType: 'minutes',
+    auctionDurationType: 'days',
+    auctionDuration: 1,
     gapTimeType: 'minutes',
+    gapTime: 10,
     winnersCount: 1,
     startSaleTS: undefined,
     startListTS: undefined,
@@ -178,6 +180,8 @@ export const AuctionCreateView = () => {
     quoteMintInfo: undefined,
     //@ts-ignore
     quoteMintInfoExtended: undefined,
+    priceTick: 0.1,
+    priceFloor: 1.0,
   });
 
   const [tieredAttributes, setTieredAttributes] = useState<TieredAuctionState>({
@@ -1218,6 +1222,7 @@ const PriceAuction = (props: {
                 prefix="◎"
                 suffix={props.attributes.quoteMintInfoExtended? props.attributes.quoteMintInfoExtended.symbol
                   : props.attributes.quoteMintAddress == WRAPPED_SOL_MINT.toBase58()? "SOL": "CUSTOM"}
+                value={props.attributes.priceFloor}
                 onChange={info =>
                   props.setAttributes({
                     ...props.attributes,
@@ -1241,6 +1246,7 @@ const PriceAuction = (props: {
               prefix="◎"
               suffix={props.attributes.quoteMintInfoExtended? props.attributes.quoteMintInfoExtended.symbol
                 : props.attributes.quoteMintAddress == WRAPPED_SOL_MINT.toBase58()? "SOL": "CUSTOM"}
+              value={props.attributes.priceTick}
               onChange={info =>
                 props.setAttributes({
                   ...props.attributes,
@@ -1464,6 +1470,7 @@ const EndingPhaseAuction = (props: {
               type="number"
               className="input"
               placeholder="Set the auction duration"
+              value={props.attributes.auctionDuration}
               onChange={info =>
                 props.setAttributes({
                   ...props.attributes,
@@ -1499,6 +1506,7 @@ const EndingPhaseAuction = (props: {
               type="number"
               className="input"
               placeholder="Set the gap time"
+              value={props.attributes.gapTime}
               onChange={info =>
                 props.setAttributes({
                   ...props.attributes,

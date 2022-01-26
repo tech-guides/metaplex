@@ -75,6 +75,7 @@ export const ArtSelector = (props: ArtSelectorProps) => {
         width={1100}
         footer={null}
         className={'modalp-40 big-modal'}
+        bodyStyle={{ width: '100%' }}
       >
         <Row className="call-to-action" style={{ marginBottom: 0 }}>
           <h2>Select the NFT you want to sell</h2>
