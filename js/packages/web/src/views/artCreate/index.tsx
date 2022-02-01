@@ -56,10 +56,21 @@ const { Text } = Typography;
 // Custom changes
 const defaultAttributes = [
   { trait_type: 'id', value: '', display_type: '' },
-  { trait_type: 'design', value: '', display_type: '' },
   { trait_type: 'city', value: 'Austin', display_type: '' },
-  { trait_type: 'size', value: `<00' X 00'>`, display_type: '' },
-  { trait_type: 'ran for', value: '<00 days>', display_type: '' },
+  { trait_type: 'design', value: '', display_type: '' },
+  { trait_type: 'size', value: `<00' x 00'>`, display_type: '' },
+  { trait_type: 'dates', value: '<mmm dd, yyyy - mmm dd, yyyy>', display_type: '' },
+  { trait_type: 'lifespan', value: '<00 days>', display_type: '' },
+  { trait_type: 'address', value: '<short address>', display_type: '' },
+  { trait_type: 'latitude', value: '(upto 5 decimal places)', display_type: '' },
+  { trait_type: 'longitude', value: '(upto 5 decimal places)', display_type: '' },
+  { trait_type: 'lighting', value: '', display_type: '' },
+  { trait_type: 'birds', value: '<yes/no>', display_type: '' },
+  { trait_type: 'traintracks', value: '<yes/no>', display_type: '' },
+  { trait_type: 'billboard property', value: '', display_type: '' },
+  { trait_type: 'facing', value: '', display_type: '' },
+  { trait_type: 'url', value: '', display_type: '' },
+  { trait_type: 'linked nft', value: '', display_type: '' }
 ];
 
 export const ArtCreateView = () => {
@@ -79,7 +90,7 @@ export const ArtCreateView = () => {
     useState<{ metadataAccount: StringPublicKey } | undefined>(undefined);
   const [files, setFiles] = useState<File[]>([]);
   const [attributes, setAttributes] = useState<IMetadataExtension>({
-    name: 'cryptoisreal. <id>',
+    name: 'crypto is real. #<id>',
     symbol: 'CIR',
     description: "<what's written on the billboard>",
     external_url: '',

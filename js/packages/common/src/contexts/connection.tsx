@@ -101,6 +101,7 @@ export function ConnectionProvider({ children }: { children: any }) {
   }
 
   const endpoint = maybeEndpoint || DEFAULT_ENDPOINT;
+  console.log({ chain: endpoint.name, endpoint: endpoint.url }) // for debugging
 
   const { current: connection } = useRef(new Connection(endpoint.url));
 
