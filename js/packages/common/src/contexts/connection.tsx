@@ -32,6 +32,7 @@ interface BlockhashAndFeeCalculator {
 
 export type ENDPOINT_NAME =
   | 'mainnet-beta'
+  | 'mainnet-genesysgo'
   | 'testnet'
   | 'devnet'
   | 'localnet'
@@ -52,9 +53,15 @@ export const ENDPOINTS: Array<Endpoint> = [
     chainId: ChainId.Devnet,
   },
   {
+    name: 'mainnet-genesysgo',
+    label: 'mainnet-genesysgo',
+    url: 'https://ssc-dao.genesysgo.net/',
+    chainId: ChainId.MainnetBeta,
+  },
+  {
     name: 'mainnet-beta',
     label: 'mainnet-beta',
-    url: 'https://ssc-dao.genesysgo.net/',
+    url: 'https://api.metaplex.solana.com/',
     chainId: ChainId.MainnetBeta,
   },
   {
