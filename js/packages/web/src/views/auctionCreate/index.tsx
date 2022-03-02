@@ -180,7 +180,7 @@ export const AuctionCreateView = () => {
     quoteMintInfo: undefined,
     //@ts-ignore
     quoteMintInfoExtended: undefined,
-    priceTick: 0.1,
+    priceTick: 0.5,
     priceFloor: 1.0,
   });
 
